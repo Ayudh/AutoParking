@@ -112,12 +112,13 @@ class ParkingLot {
   /**
    * Unparks a vehicle.
    * @param id Vehicle Registration number
+   * @return returns the status. -1 if fails. 0 if success
    */
-  void unparkVehicle(final String id) {
+  int unparkVehicle(final String id) {
     // if the vehicle is not present
     if (!isPresent(id)) {
       System.out.println("Vehicle is not present");
-      return;
+      return -1;
     }
 
     // get the slot of the vehicle in the parking lot
@@ -130,6 +131,7 @@ class ParkingLot {
     nextAvailable[vehicleSlot] = currentEmpty;
     currentEmpty = vehicleSlot;
     removeSlotNumber(id);
+    return 0;
   }
 
   /**
