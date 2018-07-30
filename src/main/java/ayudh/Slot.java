@@ -26,6 +26,10 @@ class Slot {
     inTime = LocalTime.now();
   }
 
+  public Vehicle getVehicle() {
+    return vehicle;
+  }
+
   /**
    * prints the vehicle details like number of minutes.
    */

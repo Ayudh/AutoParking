@@ -38,4 +38,14 @@ class Vehicle {
     Pattern p = Pattern.compile("(AP|TS)\\d\\d\\w{1,2}\\d\\d\\d\\d");
     return p.matcher(id).matches();
   }
+
+  @Override
+  public int hashCode() {
+    return id.hashCode() & 0x7fffffff;
+  }
+
+  @Override
+  public boolean equals(final Object obj) {
+    return id.equals(((Vehicle) obj).id);
+  }
 }
