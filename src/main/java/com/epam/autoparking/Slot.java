@@ -1,4 +1,4 @@
-package ayudh;
+package com.epam.autoparking;
 
 import java.time.LocalTime;
 

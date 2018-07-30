@@ -1,4 +1,4 @@
-package ayudh;
+package com.epam.autoparking;
 
 /**
  * Login class to validate the admin.

@@ -1,4 +1,4 @@
-package ayudh;
+package com.epam.autoparking;
 
 /**
  * ParkingLot class manages the parking vehicles and realted data.
