@@ -10,14 +10,19 @@ class ParkingLot {
    */
   private Slot[] slots;
 
+  /**
+   * max parking lot size.
+   */
   private int maxParkingLotSize;
 
+  /**
+   * current number of vehicles in the parking lot.
+   */
   private int noOfVehiclesInLot;
 
   /**
    * Constuctor.
    * Initializes the slots.
-   * nextavailable array and currentEmpty to work according.
    * @param size The size of the parking lot.
    */
   ParkingLot(final int size) {
@@ -35,6 +40,11 @@ class ParkingLot {
     return indexOfVehicle(id) != -1;
   }
 
+  /**
+   * function to get the vehicle slot number.
+   * @param id Vehicle registration number
+   * @return return the slot number if present else returns -1
+   */
   private int indexOfVehicle(String id) {
     Vehicle current = new Vehicle(id);
     int i = current.hashCode() % maxParkingLotSize;
@@ -48,33 +58,6 @@ class ParkingLot {
     }
     return -1;
   }
-
-  /**
-   * function adds the vehicle with registration
-   * to a specified slot in the parking lot.
-   * @param id Vehicle Registration number
-   * @param slotNumber Slot number in the parking lot
-   */
-//  private void addToSlotMap(final String id, final int slotNumber) {
-//    slotMap.put(id, slotNumber);
-//  }
-
-  /**
-   * Returns the slot number of the vehicle.
-   * @param id Vehicle Registration number
-   * @return returns slot number in the parking slots
-   */
-//  private int getSlotNumber(final String id) {
-//    return slotMap.get(id);
-//  }
-
-  /**
-   * removes the slot of the specified vehicle.
-   * @param id Vehicle Registration number
-   */
-//  private void removeSlotNumber(final String id) {
-//    slotMap.remove(id);
-//  }
 
   /**
    * Parks a vehicle in the parking lot.
