@@ -1,5 +1,7 @@
 package com.epam.autoparking;
 
+import java.time.LocalTime;
+
 /**
  * ParkingLot class manages the parking vehicles and realted data.
  */
@@ -104,8 +106,20 @@ class ParkingLot {
     int vehicleSlot = indexOfVehicle(id);
     slots[vehicleSlot].printDetails();
     System.out.println("Removed Vehicle");
-    slots[vehicleSlot] = null;
 
+    // logging the entry
+    Vehicle v = slots[vehicleSlot].getVehicle();
+    Log log = Log.getInstance();
+    log.write(
+        v.getId(),
+        Integer.toString(vehicleSlot),
+        slots[vehicleSlot].getInTime().toString(),
+        LocalTime.now().toString(),
+        Integer.toString (LocalTime.now().getMinute() - slots[vehicleSlot].getInTime().getMinute())
+    );
+    log.close();
+
+    slots[vehicleSlot] = null;
     return 0;
   }
 

@@ -12,10 +12,16 @@ class Slot {
    */
   private Vehicle vehicle;
 
+
   /**
    * Time object to store the InTime of vehicle.
    */
   private LocalTime inTime;
+
+
+  public LocalTime getInTime() {
+    return inTime;
+  }
 
   /**
    * assigns a vehicle to slot.

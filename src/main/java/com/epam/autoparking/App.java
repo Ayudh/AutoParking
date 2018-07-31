@@ -67,6 +67,7 @@ final class App {
       + "2.Unpark a vehicle\n"
           + "3.Check status of a vehicle\n4.Exit");
 
+      scanner.nextLine();
       int choice = scanner.nextInt();
 
       switch (choice) {
