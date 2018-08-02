@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test class for ParkingLot.
  */
-public class TestParkingLot {
+public class ParkingLotTest {
   /**
    * parking lot size to test.
    */

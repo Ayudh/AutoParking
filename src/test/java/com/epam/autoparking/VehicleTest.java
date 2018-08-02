@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test class for Vehicle.
  */
-public class TestVehicle {
+public class VehicleTest {
   /**
    * test validating vehicle number.
    */

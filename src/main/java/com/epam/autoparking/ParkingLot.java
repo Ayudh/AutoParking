@@ -1,6 +1,7 @@
 package com.epam.autoparking;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * ParkingLot class manages the parking vehicles and realted data.
@@ -47,16 +48,17 @@ class ParkingLot {
    * @param id Vehicle registration number
    * @return return the slot number if present else returns -1
    */
-  private int indexOfVehicle(String id) {
+  private int indexOfVehicle(final String id) {
     Vehicle current = new Vehicle(id);
     int i = current.hashCode() % maxParkingLotSize;
-    int startIndex = (i-1) % maxParkingLotSize;
+    int startIndex = (i - 1) % maxParkingLotSize;
     for (; slots[i] != null; i = (i + 1) % maxParkingLotSize) {
       if (slots[i].getVehicle().equals(current)) {
         return i;
       }
-      if (i == startIndex)
+      if (i == startIndex) {
         break;
+      }
     }
     return -1;
   }
@@ -82,11 +84,18 @@ class ParkingLot {
     Vehicle currentVehicle = new Vehicle(id);
 
     int indx = currentVehicle.hashCode() % maxParkingLotSize;
-    for (; slots[indx] != null; indx = (indx + 1) % maxParkingLotSize) {
+    while (slots[indx] != null) {
+      indx = (indx + 1) % maxParkingLotSize;
     }
     slots[indx] = new Slot();
-    slots[indx].assignVehicle(currentVehicle);
+    LocalDateTime vehicleInTime = LocalDateTime.now();
+    slots[indx].assignVehicle(currentVehicle, vehicleInTime);
     noOfVehiclesInLot++;
+
+    // Transaction file handling entry
+    TransactionHandler transactionHandler = TransactionHandler.getInstance();
+    transactionHandler.writeEntry(id, indx, vehicleInTime);
+
     return indx;
   }
 
@@ -107,6 +116,10 @@ class ParkingLot {
     slots[vehicleSlot].printDetails();
     System.out.println("Removed Vehicle");
 
+    // transaction file removal of entry
+    TransactionHandler transactionHandler = TransactionHandler.getInstance();
+    transactionHandler.deleteEntryById(id);
+
     // logging the entry
     Vehicle v = slots[vehicleSlot].getVehicle();
     Log log = Log.getInstance();
@@ -114,8 +127,12 @@ class ParkingLot {
         v.getId(),
         Integer.toString(vehicleSlot),
         slots[vehicleSlot].getInTime().toString(),
-        LocalTime.now().toString(),
-        Integer.toString (LocalTime.now().getMinute() - slots[vehicleSlot].getInTime().getMinute())
+        LocalDateTime.now().toString(),
+        Long.toString(
+            slots[vehicleSlot].getInTime().until(
+                LocalDateTime.now(),
+                ChronoUnit.MINUTES)
+        )
     );
     log.close();
 
@@ -135,6 +152,19 @@ class ParkingLot {
     }
     int slotNumber = indexOfVehicle(id);
     slots[slotNumber].printDetails();
+  }
+
+  /**
+   * assign a slot the vehicle from the transaction file.
+   * @param id vehicle registration number
+   * @param slotNo slotnumber in parking lot
+   * @param inTime time and date of the parking vehicle
+   */
+  void assignSlot(final String id, final int slotNo,
+                  final LocalDateTime inTime) {
+    slots[slotNo] = new Slot();
+    slots[slotNo].assignVehicle(new Vehicle(id), inTime);
+    noOfVehiclesInLot++;
   }
 
 }

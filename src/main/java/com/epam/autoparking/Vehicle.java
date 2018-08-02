@@ -13,6 +13,11 @@ class Vehicle {
   private String id;
 
   /**
+   * constant to calculate the hashcode.
+   */
+  private static final int MODULO = 0x7fffffff;
+
+  /**
    * Constuctor.
    * takes Vehicle Registration number as input
    * @param vehicleID Vehicle Registration number
@@ -41,7 +46,7 @@ class Vehicle {
 
   @Override
   public int hashCode() {
-    return id.hashCode() & 0x7fffffff;
+    return id.hashCode() & MODULO;
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.epam.autoparking;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 /**
  * Represents a single slot in parking lot.
@@ -16,10 +17,13 @@ class Slot {
   /**
    * Time object to store the InTime of vehicle.
    */
-  private LocalTime inTime;
+  private LocalDateTime inTime;
 
-
-  public LocalTime getInTime() {
+  /**
+   * to get the intime of vehicle.
+   * @return intime in LocalDataTime format
+   */
+  public LocalDateTime getInTime() {
     return inTime;
   }
 
@@ -29,9 +33,23 @@ class Slot {
    */
   void assignVehicle(final Vehicle v) {
     this.vehicle = v;
-    inTime = LocalTime.now();
+    inTime = LocalDateTime.now();
   }
 
+  /**
+   * assign vehicle the time and slot.
+   * @param v vehicle registration number
+   * @param vehicleInTime in time of vehicle
+   */
+  void assignVehicle(final Vehicle v, final LocalDateTime vehicleInTime) {
+    this.vehicle = v;
+    this.inTime = vehicleInTime;
+  }
+
+  /**
+   * to get vehicle in the slot.
+   * @return Vehicle object in the slot
+   */
   public Vehicle getVehicle() {
     return vehicle;
   }
@@ -44,7 +62,8 @@ class Slot {
       return;
     }
     System.out.println("Vehicle with ID " + vehicle.getId() + " for "
-        + (LocalTime.now().getMinute() - inTime.getMinute()) + " minutes");
+        + (inTime.until(LocalDateTime.now(), ChronoUnit.MINUTES)) + " minutes");
+
   }
 
   /**

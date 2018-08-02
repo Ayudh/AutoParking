@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test class for Login.
  */
-public class TestLogin {
+public class LoginTest {
   /**
    * test method for validating user.
    */

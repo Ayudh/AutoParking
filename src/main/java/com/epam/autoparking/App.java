@@ -1,6 +1,8 @@
 package com.epam.autoparking;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
+
 /**
  * App class.
  */
@@ -33,7 +35,6 @@ final class App {
    */
   private static final int CHOICE_4 = 4;
 
-
   /**
    * Main method Starting point of execution.
    * @param args command line parameters
@@ -56,10 +57,33 @@ final class App {
 
     System.out.println("[INFO]\tAuthenticated");
 
-    // Admin enters the size of parking lot
-    System.out.print("Enter the size of parking lot:");
-    int parkingLotSize = scanner.nextInt();
-    ParkingLot parkingLot = new ParkingLot(parkingLotSize);
+    int parkingLotSize;
+    ParkingLot parkingLot;
+
+    TransactionHandler transactionHandler = TransactionHandler.getInstance();
+
+    if (transactionHandler.isValid()) {
+
+      System.out.println("[INFO]Reading from transaction File");
+      DataFormat dataFormat = transactionHandler.readRows();
+      parkingLotSize = Integer.parseInt(dataFormat.getRow(0).get(0));
+      parkingLot = new ParkingLot(parkingLotSize);
+      for (int i = 1; i < dataFormat.noOfRows(); i++) {
+        String id = dataFormat.getRow(i).get(0);
+        int slotNumber = Integer.parseInt(dataFormat.getRow(i).get(1));
+        LocalDateTime inTime = LocalDateTime.parse(dataFormat.getRow(i).get(2));
+        System.out.println(id + " " + slotNumber + inTime);
+        parkingLot.assignSlot(id, slotNumber, inTime);
+      }
+    } else {
+
+      // Admin enters the size of parking lot
+      System.out.print("Enter the size of parking lot:");
+      parkingLotSize = scanner.nextInt();
+      parkingLot = new ParkingLot(parkingLotSize);
+      transactionHandler.writeSize(parkingLotSize);
+    }
+
 
     do {
       System.out.println("Enter your choice:");
