@@ -14,7 +14,7 @@ public final class TransactionHandler {
   /**
    * filepath of the transaction file.
    */
-  private String filePath;
+  private String filePath = "src/main/resources/transaction.csv";
 
   /**
    * instance of transaction handler.

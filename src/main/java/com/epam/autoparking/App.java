@@ -60,11 +60,6 @@ final class App {
     int parkingLotSize;
     ParkingLot parkingLot;
 
-    TransactionHandler.getInstance()
-        .setFilePath("src/main/resources/transaction.csv");
-    Log.getInstance()
-        .setFilePath("src/main/resources/log.csv");
-
     TransactionHandler transactionHandler = TransactionHandler.getInstance();
 
     if (transactionHandler.isValid()) {

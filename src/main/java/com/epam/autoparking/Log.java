@@ -15,7 +15,7 @@ public final class Log {
   /**
    * string to specify the path location.
    */
-  private String filePath;
+  private String filePath = "src/main/resources/log.csv";
 
   /**
    * instance of log class.
@@ -26,7 +26,7 @@ public final class Log {
    * private constructor.
    */
   private Log() {
-
+    dataWriter = new CSVWriter(filePath, true);
   }
 
   /**
@@ -63,6 +63,11 @@ public final class Log {
   public void close() {
     dataWriter.close();
     logInstance = null;
+  }
+
+  public void clear() {
+    dataWriter = new CSVWriter(filePath, false);
+    dataWriter.close();
   }
 
 }

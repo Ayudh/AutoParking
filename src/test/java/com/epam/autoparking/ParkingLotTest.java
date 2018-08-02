@@ -1,5 +1,6 @@
 package com.epam.autoparking;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -9,6 +10,11 @@ import static org.junit.Assert.assertNotEquals;
  * Test class for ParkingLot.
  */
 public class ParkingLotTest {
+
+  @Before
+  public void setUp() {
+    Log.getInstance().setFilePath("src/test/resources/log.csv");
+  }
   /**
    * parking lot size to test.
    */
@@ -19,6 +25,7 @@ public class ParkingLotTest {
   @Test
   public void testPark() {
     ParkingLot parkingLot = new ParkingLot(SIZE);
+    assertNotEquals(-1, parkingLot.parkVehicle("AP01Q1234"));
     assertNotEquals(-1, parkingLot.parkVehicle("AP01Q1234"));
     assertNotEquals(-1, parkingLot.parkVehicle("AP02QQ1234"));
   }
