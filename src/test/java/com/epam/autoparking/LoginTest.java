@@ -13,6 +13,8 @@ public class LoginTest {
   @Test
   public void testValidateUser() {
     assertEquals(true, Login.validateUser("hari", "hari"));
+    assertEquals(true, Login.validateUser("admin", "admin"));
     assertEquals(false, Login.validateUser("hari", "admin"));
+    assertEquals(false, Login.validateUser("ayudh", "admin"));
   }
 }

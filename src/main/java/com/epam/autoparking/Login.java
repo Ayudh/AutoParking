@@ -14,12 +14,12 @@ final class Login {
   /**
    * list of usernames to validate.
    */
-  private static String[] users = {"hari"};
+  private static String[] users = {"hari", "admin"};
 
   /**
    * list of passwords in order of usernames.
    */
-  private static String[] passwords = {"hari"};
+  private static String[] passwords = {"hari", "admin"};
 
   /**
    * function to validate the username and password.
@@ -28,8 +28,7 @@ final class Login {
    * @return true if both username and password is matched and false otherwise
    */
   static boolean validateUser(final String userName, final String password) {
-    int i = 0;
-    for (; i < users.length; i++) {
+    for (int i = 0; i < users.length; i++) {
       if (users[i].equalsIgnoreCase(userName)) {
         return passwords[i].equals(password);
       }

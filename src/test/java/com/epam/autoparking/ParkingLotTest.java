@@ -3,6 +3,7 @@ package com.epam.autoparking;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Test class for ParkingLot.
@@ -18,8 +19,8 @@ public class ParkingLotTest {
   @Test
   public void testPark() {
     ParkingLot parkingLot = new ParkingLot(SIZE);
-    assertEquals(0, parkingLot.parkVehicle("AP01Q1234"));
-    assertEquals(1, parkingLot.parkVehicle("AP02QQ1234"));
+    assertNotEquals(-1, parkingLot.parkVehicle("AP01Q1234"));
+    assertNotEquals(-1, parkingLot.parkVehicle("AP02QQ1234"));
   }
 
   /**
