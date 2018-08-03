@@ -52,7 +52,7 @@ final class App {
     if (!Login.validateUser(userName, password)) {
       System.out.println("Error: Authentication failed. "
           + "Username or Password is incorrect.");
-      System.exit(0);
+      return;
     }
 
     System.out.println("[INFO]\tAuthenticated");
@@ -72,7 +72,6 @@ final class App {
         String id = dataFormat.getRow(i).get(0);
         int slotNumber = Integer.parseInt(dataFormat.getRow(i).get(1));
         LocalDateTime inTime = LocalDateTime.parse(dataFormat.getRow(i).get(2));
-        System.out.println(id + " " + slotNumber + inTime);
         parkingLot.assignSlot(id, slotNumber, inTime);
       }
     } else {
@@ -84,6 +83,7 @@ final class App {
       transactionHandler.writeSize(parkingLotSize);
     }
 
+    boolean status = true;
 
     do {
       System.out.println("Enter your choice:");
@@ -128,13 +128,13 @@ final class App {
           break;
 
         case CHOICE_4:
-          System.exit(0);
+          status = false;
           scanner.close();
           break;
         default:
           System.out.println("Please choose a correct option :(");
       }
-    } while (true);
+    } while (status);
   }
 
 }

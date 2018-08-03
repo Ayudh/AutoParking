@@ -3,6 +3,7 @@ package com.epam.autoparking;
 import com.epam.autoparking.utils.CSVReader;
 import com.epam.autoparking.utils.CSVWriter;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.time.LocalDateTime;
 
@@ -102,6 +103,9 @@ public final class TransactionHandler {
     if (!exists()) {
       return false;
     }
+    DataFormat data = CSVReader.getInstance().readFromFile(filePath);
+    if (data.noOfRows()==0)
+      return false;
     return true;
   }
 
@@ -112,6 +116,11 @@ public final class TransactionHandler {
   public boolean exists() {
     File file = new File(filePath);
     return file.exists();
+  }
+
+  public void clear() {
+    DataWriter dataWriter = new CSVWriter(filePath, false);
+    dataWriter.close();
   }
 
 }
