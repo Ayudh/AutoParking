@@ -36,12 +36,17 @@ final class App {
   private static final int CHOICE_4 = 4;
 
   /**
+   * instance of scanner so methods can use.
+   */
+  private static Scanner scanner;
+
+  /**
    * Main method Starting point of execution.
    * @param args command line parameters
    */
   public static void main(final String[] args) {
 
-    Scanner scanner = new Scanner(System.in);
+    scanner = new Scanner(System.in);
 
     // Authenticating the admin
     System.out.print("Enter admin username:\t");
@@ -86,19 +91,12 @@ final class App {
     boolean status = true;
 
     do {
-      System.out.println("Enter your choice:");
-      System.out.println("1.Park a vehicle\n"
-      + "2.Unpark a vehicle\n"
-          + "3.Check status of a vehicle\n4.Exit");
-
-      scanner.nextLine();
-      int choice = scanner.nextInt();
+      int choice = getUserChoice();
 
       switch (choice) {
 
         case CHOICE_1:
-          System.out.print("Enter the Vehicle number:\t");
-          String vehicleNumber = scanner.next();
+          String vehicleNumber = getVehicleID();
           if (!Vehicle.validateVehicleNumber(vehicleNumber)) {
             System.out.println("Please enter valid vehicle number");
             break;
@@ -135,6 +133,29 @@ final class App {
           System.out.println("Please choose a correct option :(");
       }
     } while (status);
+  }
+
+  /**
+   * method to take input from console.
+   * @return string vehicle id
+   */
+  private static String getVehicleID() {
+    System.out.print("Enter the Vehicle number:\t");
+    return scanner.next();
+  }
+
+  /**
+   * method to take user choice from console.
+   * @return int user choice
+   */
+  private static int getUserChoice() {
+    System.out.println("Enter your choice:");
+    System.out.println("1.Park a vehicle\n"
+    + "2.Unpark a vehicle\n"
+        + "3.Check status of a vehicle\n4.Exit");
+
+    scanner.nextLine();
+    return scanner.nextInt();
   }
 
 }

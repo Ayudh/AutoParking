@@ -65,6 +65,9 @@ public final class Log {
     logInstance = null;
   }
 
+  /**
+   * clears the log file.
+   */
   public void clear() {
     dataWriter = new CSVWriter(filePath, false);
     dataWriter.close();

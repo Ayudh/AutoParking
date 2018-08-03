@@ -11,6 +11,9 @@ import static org.junit.Assert.assertNotEquals;
  */
 public class ParkingLotTest {
 
+  /**
+   * initializes the log file path.
+   */
   @Before
   public void setUp() {
     Log.getInstance().setFilePath("src/test/resources/log.csv");
