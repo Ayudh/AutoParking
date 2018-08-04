@@ -1,5 +1,9 @@
 package com.epam.autoparking;
 
+import com.epam.autoparking.exceptions.NotPresentInLotException;
+import com.epam.autoparking.exceptions.ParkingLotFullException;
+import com.epam.autoparking.exceptions.PresentInLotException;
+
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -97,32 +101,17 @@ final class App {
 
         case CHOICE_1:
           String vehicleNumber = getVehicleID();
-          if (!Vehicle.validateVehicleNumber(vehicleNumber)) {
-            System.out.println("Please enter valid vehicle number");
-            break;
-          }
-          System.out.println("Your slot is '"
-              + parkingLot.parkVehicle(vehicleNumber) + "'");
+          park(parkingLot, vehicleNumber);
           break;
 
         case CHOICE_2:
-          System.out.print("Enter the vehicle number:\t");
-          String vehiclenumber = scanner.next();
-          if (!Vehicle.validateVehicleNumber(vehiclenumber)) {
-            System.out.println("Please enter valid vehicle number");
-            break;
-          }
-          parkingLot.unparkVehicle(vehiclenumber);
+          String vehiclenumber = getVehicleID();
+          unpark(parkingLot, vehiclenumber);
           break;
 
         case CHOICE_3:
-          System.out.print("Enter the vehicle number:\t");
-          String vehicleID = scanner.next();
-          if (!Vehicle.validateVehicleNumber(vehicleID)) {
-            System.out.println("Please enter valid vehicle number");
-            break;
-          }
-          parkingLot.checkStatus(vehicleID);
+          String vehicleID = getVehicleID();
+          checkStatus(parkingLot, vehicleID);
           break;
 
         case CHOICE_4:
@@ -133,6 +122,46 @@ final class App {
           System.out.println("Please choose a correct option :(");
       }
     } while (status);
+  }
+
+  private static void checkStatus(ParkingLot parkingLot, String vehicleID) {
+    if (!Vehicle.validateVehicleNumber(vehicleID)) {
+      System.out.println("Please enter valid vehicle number");
+      return;
+    }
+    try {
+      parkingLot.checkStatus(vehicleID);
+    } catch (NotPresentInLotException e) {
+      System.out.println("Not present in the parking lot");
+    }
+  }
+
+  private static void unpark(ParkingLot parkingLot, String vehiclenumber) {
+    if (!Vehicle.validateVehicleNumber(vehiclenumber)) {
+      System.out.println("Please enter valid vehicle number");
+      return;
+    }
+    try {
+      parkingLot.unparkVehicle(vehiclenumber);
+    } catch (NotPresentInLotException e) {
+      System.out.println("Not present in the parking lot");
+    }
+  }
+
+  private static void park(ParkingLot parkingLot, String vehicleNumber) {
+    if (!Vehicle.validateVehicleNumber(vehicleNumber)) {
+      System.out.println("Please enter valid vehicle number");
+      return;
+    }
+    try {
+      System.out.println("Your slot is '"
+          + parkingLot.parkVehicle(vehicleNumber) + "'");
+    } catch (PresentInLotException e) {
+      System.out.println("Vehicle present in the parking lot");
+    } catch (ParkingLotFullException e) {
+      System.out.println("Parking lot is full");
+    }
+    return;
   }
 
   /**

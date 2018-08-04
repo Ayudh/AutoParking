@@ -1,5 +1,9 @@
 package com.epam.autoparking;
 
+import com.epam.autoparking.exceptions.NotPresentInLotException;
+import com.epam.autoparking.exceptions.ParkingLotFullException;
+import com.epam.autoparking.exceptions.PresentInLotException;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -68,17 +72,15 @@ class ParkingLot {
    * @param id Vehicle Registration number
    * @return Parking slot number
    */
-  int parkVehicle(final String id) {
+  int parkVehicle(final String id) throws PresentInLotException, ParkingLotFullException {
     // if the vehicle is already present no need to park
     if (isPresent(id)) {
-      System.out.println("Already present in the parking");
-      return indexOfVehicle(id);
+      throw new PresentInLotException("Vehicle already present in parking lot");
     }
 
     // if the currentEmpty is -1 no slot is empty
     if (noOfVehiclesInLot == maxParkingLotSize) {
-      System.out.println("Parking lot is full. :(");
-      return -1;
+      throw new ParkingLotFullException("Parking lot is full");
     }
 
     Vehicle currentVehicle = new Vehicle(id);
@@ -104,11 +106,10 @@ class ParkingLot {
    * @param id Vehicle Registration number
    * @return returns the status. -1 if fails. 0 if success
    */
-  int unparkVehicle(final String id) {
+  int unparkVehicle(final String id) throws NotPresentInLotException {
     // if the vehicle is not present
     if (!isPresent(id)) {
-      System.out.println("Vehicle is not present");
-      return -1;
+      throw new NotPresentInLotException("Vehicle not present in parking lot");
     }
 
     // get the slot of the vehicle in the parking lot
@@ -144,11 +145,10 @@ class ParkingLot {
    * gives details of the vehicle in the parking.
    * @param id Vehicle Registration number
    */
-  void checkStatus(final String id) {
+  void checkStatus(final String id) throws NotPresentInLotException {
     // if vehicle is not present
     if (!isPresent(id)) {
-      System.out.println("Vehicle is not present in the parking lot");
-      return;
+      throw new NotPresentInLotException("Vehicle Not present in Lot.");
     }
     int slotNumber = indexOfVehicle(id);
     slots[slotNumber].printDetails();
