@@ -1,9 +1,11 @@
 package com.epam.autoparking;
 
+import com.epam.autoparking.exceptions.FileReadFailedException;
 import com.epam.autoparking.exceptions.NotPresentInLotException;
 import com.epam.autoparking.exceptions.ParkingLotFullException;
 import com.epam.autoparking.exceptions.PresentInLotException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -72,7 +74,7 @@ class ParkingLot {
    * @param id Vehicle Registration number
    * @return Parking slot number
    */
-  int parkVehicle(final String id) throws PresentInLotException, ParkingLotFullException {
+  int parkVehicle(final String id) throws PresentInLotException, ParkingLotFullException, IOException {
     // if the vehicle is already present no need to park
     if (isPresent(id)) {
       throw new PresentInLotException("Vehicle already present in parking lot");
@@ -106,7 +108,7 @@ class ParkingLot {
    * @param id Vehicle Registration number
    * @return returns the status. -1 if fails. 0 if success
    */
-  int unparkVehicle(final String id) throws NotPresentInLotException {
+  int unparkVehicle(final String id) throws NotPresentInLotException, FileReadFailedException, IOException {
     // if the vehicle is not present
     if (!isPresent(id)) {
       throw new NotPresentInLotException("Vehicle not present in parking lot");

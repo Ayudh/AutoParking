@@ -28,15 +28,6 @@ class Slot {
   }
 
   /**
-   * assigns a vehicle to slot.
-   * @param v vehicle to be assigned
-   */
-  void assignVehicle(final Vehicle v) {
-    this.vehicle = v;
-    inTime = LocalDateTime.now();
-  }
-
-  /**
    * assign vehicle the time and slot.
    * @param v vehicle registration number
    * @param vehicleInTime in time of vehicle
@@ -58,20 +49,9 @@ class Slot {
    * prints the vehicle details like number of minutes.
    */
   void printDetails() {
-    if (vehicle == null) {
-      return;
-    }
     System.out.println("Vehicle with ID " + vehicle.getId() + " for "
         + (inTime.until(LocalDateTime.now(), ChronoUnit.MINUTES)) + " minutes");
 
-  }
-
-  /**
-   * removes the vehicle in the slot.
-   */
-  void removeVehicle() {
-    vehicle = null;
-    inTime = null;
   }
 
 }

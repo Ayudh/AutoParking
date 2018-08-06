@@ -1,10 +1,12 @@
 package com.epam.autoparking;
 
+import com.epam.autoparking.exceptions.FileReadFailedException;
 import com.epam.autoparking.utils.CSVReader;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,17 +19,18 @@ public class AppTest {
    * method initializes the transaction and log file.
    */
   @Before
-  public void setup() {
+  public void setup() throws IOException {
     Log.getInstance().setFilePath("src/test/resources/log.csv");
     TransactionHandler.getInstance()
         .setFilePath("src/test/resources/transaction.csv");
+    TransactionHandler.getInstance().clear();
   }
 
   /**
    * test method for transaction file empty.
    */
   @Test
-  public void testMainTransactionEmpty() {
+  public void testMainTransactionEmpty() throws FileReadFailedException, IOException {
     Log.getInstance().clear();
     TransactionHandler.getInstance().clear();
     String input = "admin\nadmin\n20\n4";
@@ -42,8 +45,8 @@ public class AppTest {
    * test method for park method.
    */
   @Test
-  public void testMainPark() {
-    String input = "admin\nadmin\n20\n1\nAP01W1234\n4";
+  public void testMainPark() throws FileReadFailedException, IOException {
+    String input = "admin\nadmin\n20\n1\nAP01AA1234\n1\nAP01W1234\n4";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
@@ -61,13 +64,33 @@ public class AppTest {
     assertTrue(found);
   }
 
+  @Test
+  public void testMainParkVehiclePresent() throws FileReadFailedException, IOException {
+    String input = "admin\nadmin\n1\n1\nAP01W1234\n1\nAP01W1234\n1\nAP01A1234\n4\n";
+    ByteArrayInputStream byteArrayInputStream =
+        new ByteArrayInputStream(input.getBytes());
+    System.setIn(byteArrayInputStream);
+    App.main(null);
+
+  }
+
   /**
    * test method for unpark method.
    */
   @Test
-  public void testMainUnpark() {
+  public void testMainUnpark() throws FileReadFailedException, IOException {
     testMainPark();
     String input = "admin\nadmin\n2\nAP01W1234\n4";
+    ByteArrayInputStream byteArrayInputStream =
+        new ByteArrayInputStream(input.getBytes());
+    System.setIn(byteArrayInputStream);
+    App.main(null);
+  }
+
+  @Test
+  public void testMainUnparkNotPresent() throws FileReadFailedException, IOException {
+    testMainPark();
+    String input = "admin\nadmin\n2\nAP01Z1234\n4";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
@@ -78,7 +101,7 @@ public class AppTest {
    * test method for loading from trasaction file.
    */
   @Test
-  public void testMainLoadTransaction() {
+  public void testMainLoadTransaction() throws FileReadFailedException, IOException {
     String input = "admin\nadmin\n20\n1\nAP01W1234\n4";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
@@ -90,8 +113,26 @@ public class AppTest {
    * test method for checking status of the vehicle.
    */
   @Test
-  public void testMainCheckStatus() {
-    String input = "admin\nadmin\n3\nAP01W1234\n4";
+  public void testMainCheckStatus() throws FileReadFailedException, IOException {
+    String input = "admin\nadmin\n20\n1\nAP01W1234\n3\nAP01W1234\n4";
+    ByteArrayInputStream byteArrayInputStream =
+        new ByteArrayInputStream(input.getBytes());
+    System.setIn(byteArrayInputStream);
+    App.main(null);
+  }
+
+  @Test
+  public void testMainCheckStatusNotPresent() throws FileReadFailedException, IOException {
+    String input = "admin\nadmin\n20\n1\nAP01W1234\n3\nAP01W0234\n4";
+    ByteArrayInputStream byteArrayInputStream =
+        new ByteArrayInputStream(input.getBytes());
+    System.setIn(byteArrayInputStream);
+    App.main(null);
+  }
+
+  @Test
+  public void testMainInvalidOption() throws FileReadFailedException, IOException {
+    String input = "admin\nadmin\n20\n5\n4\n";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
@@ -102,8 +143,17 @@ public class AppTest {
    * test method for invalid login.
    */
   @Test
-  public void testMainInvalidLogin() {
+  public void testMainInvalidLogin() throws FileReadFailedException, IOException {
     String input = "admin\nadmi\n";
+    ByteArrayInputStream byteArrayInputStream =
+        new ByteArrayInputStream(input.getBytes());
+    System.setIn(byteArrayInputStream);
+    App.main(null);
+  }
+
+  @Test
+  public void testMainInvalidVehicleId() throws FileReadFailedException, IOException {
+    String input = "admin\nadmin\n20\n1\nAP01WWW1234\n4\n";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);

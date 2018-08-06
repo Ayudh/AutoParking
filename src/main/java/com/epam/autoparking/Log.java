@@ -2,6 +2,8 @@ package com.epam.autoparking;
 
 import com.epam.autoparking.utils.CSVWriter;
 
+import java.io.IOException;
+
 /**
  * Log class contains operations to write data to log file.
  */
@@ -25,7 +27,7 @@ public final class Log {
   /**
    * private constructor.
    */
-  private Log() {
+  private Log() throws IOException {
     dataWriter = new CSVWriter(filePath, true);
   }
 
@@ -33,7 +35,7 @@ public final class Log {
    * follows singleton pattern.
    * @return instance of log class
    */
-  public static Log getInstance() {
+  public static Log getInstance() throws IOException {
     if (logInstance == null) {
       logInstance = new Log();
     }
@@ -44,7 +46,7 @@ public final class Log {
    * method to set filepath of log file.
    * @param path file path of log file
    */
-  public void setFilePath(final String path) {
+  public void setFilePath(final String path) throws IOException {
     filePath = path;
     dataWriter = new CSVWriter(filePath, true);
   }
@@ -53,14 +55,14 @@ public final class Log {
    * writes fields specified to the log file.
    * @param strings variable length args to write to fields.
    */
-  public void write(final String... strings) {
+  public void write(final String... strings) throws IOException {
     dataWriter.writeRow(strings);
   }
 
   /**
    * close the resources.
    */
-  public void close() {
+  public void close() throws IOException {
     dataWriter.close();
     logInstance = null;
   }
@@ -68,7 +70,7 @@ public final class Log {
   /**
    * clears the log file.
    */
-  public void clear() {
+  public void clear() throws IOException {
     dataWriter = new CSVWriter(filePath, false);
     dataWriter.close();
   }

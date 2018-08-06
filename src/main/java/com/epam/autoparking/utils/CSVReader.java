@@ -2,6 +2,7 @@ package com.epam.autoparking.utils;
 
 import com.epam.autoparking.DataFormat;
 import com.epam.autoparking.DataReader;
+import com.epam.autoparking.exceptions.FileReadFailedException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -43,7 +44,7 @@ public final class CSVReader implements DataReader {
    * @param filePath file system path to the file that needs to be read
    * @return Data from the csv file as DataFormat
    */
-  public DataFormat readFromFile(final String filePath) {
+  public DataFormat readFromFile(final String filePath) throws FileReadFailedException {
 
     String line;
 
@@ -62,8 +63,9 @@ public final class CSVReader implements DataReader {
       }
 
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new FileReadFailedException("Failure in reading from file");
     }
+
     return new DataFormat(rows);
   }
 

@@ -1,9 +1,11 @@
 package com.epam.autoparking;
 
+import com.epam.autoparking.exceptions.FileReadFailedException;
 import com.epam.autoparking.exceptions.NotPresentInLotException;
 import com.epam.autoparking.exceptions.ParkingLotFullException;
 import com.epam.autoparking.exceptions.PresentInLotException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -48,7 +50,7 @@ final class App {
    * Main method Starting point of execution.
    * @param args command line parameters
    */
-  public static void main(final String[] args) {
+  public static void main(final String[] args) throws FileReadFailedException, IOException {
 
     scanner = new Scanner(System.in);
 
@@ -97,21 +99,28 @@ final class App {
     do {
       int choice = getUserChoice();
 
+      String vehicleNumber = null;
+      if (choice >=1 && choice <= 3) {
+        vehicleNumber = getValidVehicleID();
+        if (vehicleNumber == null) {
+          System.out.println("Please enter valid vehicle number");
+          continue;
+        }
+      }
+
       switch (choice) {
 
         case CHOICE_1:
-          String vehicleNumber = getVehicleID();
           park(parkingLot, vehicleNumber);
           break;
 
         case CHOICE_2:
-          String vehiclenumber = getVehicleID();
-          unpark(parkingLot, vehiclenumber);
+
+          unpark(parkingLot, vehicleNumber);
           break;
 
         case CHOICE_3:
-          String vehicleID = getVehicleID();
-          checkStatus(parkingLot, vehicleID);
+          checkStatus(parkingLot, vehicleNumber);
           break;
 
         case CHOICE_4:
@@ -125,10 +134,6 @@ final class App {
   }
 
   private static void checkStatus(ParkingLot parkingLot, String vehicleID) {
-    if (!Vehicle.validateVehicleNumber(vehicleID)) {
-      System.out.println("Please enter valid vehicle number");
-      return;
-    }
     try {
       parkingLot.checkStatus(vehicleID);
     } catch (NotPresentInLotException e) {
@@ -136,11 +141,7 @@ final class App {
     }
   }
 
-  private static void unpark(ParkingLot parkingLot, String vehiclenumber) {
-    if (!Vehicle.validateVehicleNumber(vehiclenumber)) {
-      System.out.println("Please enter valid vehicle number");
-      return;
-    }
+  private static void unpark(ParkingLot parkingLot, String vehiclenumber) throws FileReadFailedException, IOException {
     try {
       parkingLot.unparkVehicle(vehiclenumber);
     } catch (NotPresentInLotException e) {
@@ -148,11 +149,7 @@ final class App {
     }
   }
 
-  private static void park(ParkingLot parkingLot, String vehicleNumber) {
-    if (!Vehicle.validateVehicleNumber(vehicleNumber)) {
-      System.out.println("Please enter valid vehicle number");
-      return;
-    }
+  private static void park(ParkingLot parkingLot, String vehicleNumber) throws IOException {
     try {
       System.out.println("Your slot is '"
           + parkingLot.parkVehicle(vehicleNumber) + "'");
@@ -168,9 +165,14 @@ final class App {
    * method to take input from console.
    * @return string vehicle id
    */
-  private static String getVehicleID() {
+  private static String getValidVehicleID() {
     System.out.print("Enter the Vehicle number:\t");
-    return scanner.next();
+    String input = scanner.next();
+    if (!Vehicle.validateVehicleNumber(input)) {
+      input = null;
+    }
+    return input;
+
   }
 
   /**

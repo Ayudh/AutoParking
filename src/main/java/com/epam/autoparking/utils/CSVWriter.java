@@ -22,12 +22,8 @@ public class CSVWriter implements DataWriter {
    * @param filePath points to the file that needs to be written
    * @param append append status. specify true, if append should be done.
    */
-  public CSVWriter(final String filePath, final boolean append) {
-    try {
-      writer = new FileWriter(filePath, append);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  public CSVWriter(final String filePath, final boolean append) throws IOException {
+    writer = new FileWriter(filePath, append);
   }
 
   /**
@@ -35,7 +31,7 @@ public class CSVWriter implements DataWriter {
    * @param fields variable length arguments to write any
    * number of fields to the csv file.
    */
-  public void writeRow(final String... fields) {
+  public void writeRow(final String... fields) throws IOException {
     String row = "";
     for (int i = 0; i < fields.length - 1; i++) {
 
@@ -49,23 +45,15 @@ public class CSVWriter implements DataWriter {
    * private method to write a string to the file.
    * @param s string to be written
    */
-  private void write(final String s) {
-    try {
-      writer.write(s);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  private void write(final String s) throws IOException {
+    writer.write(s);
   }
 
   /**
    * method to close the file resources.
    */
-  public void close() {
-    try {
-      writer.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  public void close() throws IOException {
+    writer.close();
   }
 
 }

@@ -1,9 +1,11 @@
 package com.epam.autoparking;
 
+import com.epam.autoparking.exceptions.FileReadFailedException;
 import com.epam.autoparking.utils.CSVReader;
 import com.epam.autoparking.utils.CSVWriter;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
@@ -54,7 +56,7 @@ public final class TransactionHandler {
    * @param inTime in-time of vehicle
    */
   public void writeEntry(final String id, final int slotNumber,
-                         final LocalDateTime inTime) {
+                         final LocalDateTime inTime) throws IOException {
     DataWriter dataWriter = new CSVWriter(filePath, true);
     dataWriter.writeRow(id, Integer.toString(slotNumber), inTime.toString());
     dataWriter.close();
@@ -64,7 +66,7 @@ public final class TransactionHandler {
    * writes the size of parking lot on the first line of file.
    * @param parkingSize size of parking lot
    */
-  public void writeSize(final int parkingSize) {
+  public void writeSize(final int parkingSize) throws IOException {
     DataWriter dataWriter = new CSVWriter(filePath, true);
     dataWriter.writeRow(Integer.toString(parkingSize));
     dataWriter.close();
@@ -74,7 +76,7 @@ public final class TransactionHandler {
    * to read all rows of the transactions.
    * @return data in DataFormat
    */
-  public DataFormat readRows() {
+  public DataFormat readRows() throws FileReadFailedException {
     return CSVReader.getInstance().readFromFile(filePath);
   }
 
@@ -82,7 +84,7 @@ public final class TransactionHandler {
    * deletes entry of transaction file by id.
    * @param id vehicle registration number
    */
-  public void deleteEntryById(final String id) {
+  public void deleteEntryById(final String id) throws FileReadFailedException, IOException {
     DataFormat data = readRows();
     DataWriter dataWriter = new CSVWriter(filePath, false);
     for (int i = 0; i < data.noOfRows(); i++) {
@@ -98,7 +100,7 @@ public final class TransactionHandler {
    * checks whehter a file is valid or not.
    * @return returns true if file is valid. False, otherwise.
    */
-  public boolean isValid() {
+  public boolean isValid() throws FileReadFailedException {
     if (!exists()) {
       return false;
     }
@@ -121,7 +123,7 @@ public final class TransactionHandler {
   /**
    * clears the transaction file.
    */
-  public void clear() {
+  public void clear() throws IOException {
     DataWriter dataWriter = new CSVWriter(filePath, false);
     dataWriter.close();
   }

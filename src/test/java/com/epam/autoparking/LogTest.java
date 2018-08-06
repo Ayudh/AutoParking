@@ -1,8 +1,10 @@
 package com.epam.autoparking;
 
+import com.epam.autoparking.exceptions.FileReadFailedException;
 import com.epam.autoparking.utils.CSVReader;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -14,10 +16,11 @@ public class LogTest {
    * test method for writing in log.
    */
   @Test
-  public void testWrite() {
+  public void testWrite() throws FileReadFailedException, IOException {
 
     Log.getInstance().setFilePath("src/test/resources/log.csv");
     Log log = Log.getInstance();
+    log.write("asdf", "asdf", "asdf");
     log.close();
     DataFormat data = CSVReader.getInstance()
         .readFromFile("src/test/resources/log.csv");
