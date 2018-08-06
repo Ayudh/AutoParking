@@ -1,0 +1,6 @@
+/target/
+.project
+.idea/*
+.settings/*
+.vs
+.classpath
