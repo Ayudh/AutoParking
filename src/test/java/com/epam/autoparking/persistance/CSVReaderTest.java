@@ -1,8 +1,7 @@
-package com.epam.autoparking.utils;
+package com.epam.autoparking.persistance;
 
-import static org.junit.Assert.*;
-
-import com.epam.autoparking.exceptions.FileReadFailedException;
+import com.epam.autoparking.persistance.CSVReader;
+import com.epam.autoparking.persistance.FileReadFailedException;
 import org.junit.Test;
 
 public class CSVReaderTest {

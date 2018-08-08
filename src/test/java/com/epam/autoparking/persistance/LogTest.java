@@ -1,7 +1,9 @@
-package com.epam.autoparking;
+package com.epam.autoparking.persistance;
 
-import com.epam.autoparking.exceptions.FileReadFailedException;
-import com.epam.autoparking.utils.CSVReader;
+import com.epam.autoparking.persistance.DataFormat;
+import com.epam.autoparking.persistance.FileReadFailedException;
+import com.epam.autoparking.persistance.CSVReader;
+import com.epam.autoparking.persistance.Log;
 import org.junit.Test;
 
 import java.io.IOException;

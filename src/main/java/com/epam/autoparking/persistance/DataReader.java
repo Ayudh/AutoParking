@@ -1,6 +1,4 @@
-package com.epam.autoparking;
-
-import com.epam.autoparking.exceptions.FileReadFailedException;
+package com.epam.autoparking.persistance;
 
 /**
  * interface to abstract data reading.

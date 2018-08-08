@@ -1,9 +1,11 @@
-package com.epam.autoparking;
+package com.epam.autoparking.parkingservice;
 
-import com.epam.autoparking.exceptions.FileReadFailedException;
-import com.epam.autoparking.exceptions.NotPresentInLotException;
-import com.epam.autoparking.exceptions.ParkingLotFullException;
-import com.epam.autoparking.exceptions.PresentInLotException;
+import com.epam.autoparking.parkingservice.NotPresentInLotException;
+import com.epam.autoparking.parkingservice.ParkingLot;
+import com.epam.autoparking.parkingservice.ParkingLotFullException;
+import com.epam.autoparking.parkingservice.PresentInLotException;
+import com.epam.autoparking.persistance.FileReadFailedException;
+import com.epam.autoparking.persistance.Log;
 import org.junit.Before;
 import org.junit.Test;
 

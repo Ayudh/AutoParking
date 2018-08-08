@@ -1,9 +1,9 @@
-package com.epam.autoparking;
+package com.epam.autoparking.parkingservice;
 
-import com.epam.autoparking.exceptions.FileReadFailedException;
-import com.epam.autoparking.exceptions.NotPresentInLotException;
-import com.epam.autoparking.exceptions.ParkingLotFullException;
-import com.epam.autoparking.exceptions.PresentInLotException;
+import com.epam.autoparking.Vehicle;
+import com.epam.autoparking.persistance.FileReadFailedException;
+import com.epam.autoparking.persistance.Log;
+import com.epam.autoparking.persistance.TransactionHandler;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 /**
  * ParkingLot class manages the parking vehicles and realted data.
  */
-class ParkingLot {
+public class ParkingLot {
 
   /**
    * array maintains the slots of parking lot.
@@ -34,7 +34,7 @@ class ParkingLot {
    * Initializes the slots.
    * @param size The size of the parking lot.
    */
-  ParkingLot(final int size) {
+  public ParkingLot(final int size) {
     maxParkingLotSize = size;
     slots = new Slot[size];
     noOfVehiclesInLot = 0;
@@ -74,7 +74,7 @@ class ParkingLot {
    * @param id Vehicle Registration number
    * @return Parking slot number
    */
-  int parkVehicle(final String id) throws PresentInLotException, ParkingLotFullException, IOException {
+  public int parkVehicle(final String id) throws PresentInLotException, ParkingLotFullException, IOException {
     // if the vehicle is already present no need to park
     if (isPresent(id)) {
       throw new PresentInLotException("Vehicle already present in parking lot");
@@ -108,7 +108,7 @@ class ParkingLot {
    * @param id Vehicle Registration number
    * @return returns the status. -1 if fails. 0 if success
    */
-  int unparkVehicle(final String id) throws NotPresentInLotException, FileReadFailedException, IOException {
+  public int unparkVehicle(final String id) throws NotPresentInLotException, FileReadFailedException, IOException {
     // if the vehicle is not present
     if (!isPresent(id)) {
       throw new NotPresentInLotException("Vehicle not present in parking lot");
@@ -147,7 +147,7 @@ class ParkingLot {
    * gives details of the vehicle in the parking.
    * @param id Vehicle Registration number
    */
-  void checkStatus(final String id) throws NotPresentInLotException {
+  public void checkStatus(final String id) throws NotPresentInLotException {
     // if vehicle is not present
     if (!isPresent(id)) {
       throw new NotPresentInLotException("Vehicle Not present in Lot.");
@@ -162,8 +162,8 @@ class ParkingLot {
    * @param slotNo slotnumber in parking lot
    * @param inTime time and date of the parking vehicle
    */
-  void assignSlot(final String id, final int slotNo,
-                  final LocalDateTime inTime) {
+  public void assignSlot(final String id, final int slotNo,
+                         final LocalDateTime inTime) {
     slots[slotNo] = new Slot();
     slots[slotNo].assignVehicle(new Vehicle(id), inTime);
     noOfVehiclesInLot++;

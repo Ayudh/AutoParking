@@ -1,4 +1,6 @@
-package com.epam.autoparking;
+package com.epam.autoparking.parkingservice;
+
+import com.epam.autoparking.Vehicle;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

@@ -1,7 +1,6 @@
-package com.epam.autoparking.utils;
+package com.epam.autoparking.persistance;
 
-import static org.junit.Assert.*;
-
+import com.epam.autoparking.persistance.CSVWriter;
 import org.junit.Test;
 
 import java.io.IOException;

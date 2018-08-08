@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 /**
  * holds the properties of vehicle.
  */
-class Vehicle {
+public class Vehicle {
 
   /**
    * Vehicle Registration number.
@@ -22,7 +22,7 @@ class Vehicle {
    * takes Vehicle Registration number as input
    * @param vehicleID Vehicle Registration number
    */
-  Vehicle(final String vehicleID) {
+  public Vehicle(final String vehicleID) {
     this.id = vehicleID;
   }
 
@@ -30,7 +30,7 @@ class Vehicle {
    * Getter method for ID.
    * @return ID of the vehicle
    */
-  String getId() {
+  public String getId() {
     return id;
   }
 

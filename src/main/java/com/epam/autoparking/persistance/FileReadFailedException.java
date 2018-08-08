@@ -1,4 +1,4 @@
-package com.epam.autoparking.exceptions;
+package com.epam.autoparking.persistance;
 
 public class FileReadFailedException extends Exception {
   public FileReadFailedException(String message) {

@@ -1,6 +1,4 @@
-package com.epam.autoparking.utils;
-
-import com.epam.autoparking.DataWriter;
+package com.epam.autoparking.persistance;
 
 import java.io.FileWriter;
 import java.io.IOException;

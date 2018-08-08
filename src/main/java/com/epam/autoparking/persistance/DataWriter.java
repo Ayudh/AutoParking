@@ -1,4 +1,4 @@
-package com.epam.autoparking;
+package com.epam.autoparking.persistance;
 
 import java.io.IOException;
 

@@ -1,6 +1,7 @@
-package com.epam.autoparking;
+package com.epam.autoparking.persistance;
 
-import com.epam.autoparking.exceptions.FileReadFailedException;
+import com.epam.autoparking.persistance.FileReadFailedException;
+import com.epam.autoparking.persistance.TransactionHandler;
 import org.junit.Assert;
 import org.junit.Test;
 

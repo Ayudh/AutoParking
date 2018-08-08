@@ -1,8 +1,4 @@
-package com.epam.autoparking.utils;
-
-import com.epam.autoparking.DataFormat;
-import com.epam.autoparking.DataReader;
-import com.epam.autoparking.exceptions.FileReadFailedException;
+package com.epam.autoparking.persistance;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
