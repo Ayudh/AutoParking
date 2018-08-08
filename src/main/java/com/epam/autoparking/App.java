@@ -7,10 +7,12 @@ import com.epam.autoparking.parkingservice.PresentInLotException;
 import com.epam.autoparking.persistance.DataFormat;
 import com.epam.autoparking.persistance.FileReadFailedException;
 import com.epam.autoparking.persistance.TransactionHandler;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  * App class.
@@ -49,6 +51,22 @@ final class App {
    */
   private static Scanner scanner;
 
+  private static boolean validArgs(String[] args) {
+    boolean status = true;
+
+    if (args.length < 3)
+      status = false;
+    else if (args.length > 4)
+      status = false;
+    else if (args.length == 3 && !args[2].equals("0")) {
+      status = false;
+    } else if (args.length == 4 && !(args[2].equals("1") && Pattern.compile("\\d+").matcher(args[3]).matches())) {
+      status = false;
+    }
+
+    return status;
+  }
+
   /**
    * Main method Starting point of execution.
    * @param args command line parameters
@@ -57,11 +75,14 @@ final class App {
 
     scanner = new Scanner(System.in);
 
-    // Authenticating the admin
-    System.out.print("Enter admin username:\t");
-    String userName = scanner.next();
-    System.out.print("Enter password:\t");
-    String password = scanner.next();
+    if (!validArgs(args)) {
+      System.out.println("Please enter valid command line arguments");
+      System.out.println("usage: <username> <password> <0/1> <slotsize if 1>");
+      System.exit(1);
+    }
+
+    String userName = args[0];
+    String password = args[1];
 
     if (!Login.validateUser(userName, password)) {
       System.out.println("Error: Authentication failed. "
@@ -76,8 +97,7 @@ final class App {
 
     TransactionHandler transactionHandler = TransactionHandler.getInstance();
 
-    if (transactionHandler.isValid()) {
-
+    if (args[2].equals("0")) {
       System.out.println("[INFO]Reading from transaction File");
       DataFormat dataFormat = transactionHandler.readRows();
       parkingLotSize = Integer.parseInt(dataFormat.getRow(0).get(0));
@@ -89,10 +109,8 @@ final class App {
         parkingLot.assignSlot(id, slotNumber, inTime);
       }
     } else {
-
-      // Admin enters the size of parking lot
-      System.out.print("Enter the size of parking lot:");
-      parkingLotSize = scanner.nextInt();
+      transactionHandler.clear();
+      parkingLotSize = Integer.parseInt(args[3]);
       parkingLot = new ParkingLot(parkingLotSize);
       transactionHandler.writeSize(parkingLotSize);
     }
@@ -161,7 +179,6 @@ final class App {
     } catch (ParkingLotFullException e) {
       System.out.println("Parking lot is full");
     }
-    return;
   }
 
   /**
@@ -187,8 +204,6 @@ final class App {
     System.out.println("1.Park a vehicle\n"
     + "2.Unpark a vehicle\n"
         + "3.Check status of a vehicle\n4.Exit");
-
-    scanner.nextLine();
     return scanner.nextInt();
   }
 

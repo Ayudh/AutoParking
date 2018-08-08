@@ -32,11 +32,11 @@ public class AppTest {
   public void testMainTransactionEmpty() throws FileReadFailedException, IOException {
     Log.getInstance().clear();
     TransactionHandler.getInstance().clear();
-    String input = "admin\nadmin\n20\n4";
+    String input = "4\n";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "1", "20"});
     assertTrue(TransactionHandler.getInstance().exists());
   }
 
@@ -45,11 +45,11 @@ public class AppTest {
    */
   @Test
   public void testMainPark() throws FileReadFailedException, IOException {
-    String input = "admin\nadmin\n20\n1\nAP01AA1234\n1\nAP01W1234\n4";
+    String input = "1\nAP01AA1234\n1\nAP01W1234\n4";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "1", "20"});
     DataFormat data = CSVReader.getInstance()
         .readFromFile("src/test/resources/transaction.csv");
     boolean found = false;
@@ -65,11 +65,11 @@ public class AppTest {
 
   @Test
   public void testMainParkVehiclePresent() throws FileReadFailedException, IOException {
-    String input = "admin\nadmin\n1\n1\nAP01W1234\n1\nAP01W1234\n1\nAP01A1234\n4\n";
+    String input = "1\nAP01W1234\n1\nAP01W1234\n1\nAP01A1234\n4\n";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "1","10"});
 
   }
 
@@ -79,21 +79,21 @@ public class AppTest {
   @Test
   public void testMainUnpark() throws FileReadFailedException, IOException {
     testMainPark();
-    String input = "admin\nadmin\n2\nAP01W1234\n4";
+    String input = "2\nAP01W1234\n4";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "0"});
   }
 
   @Test
   public void testMainUnparkNotPresent() throws FileReadFailedException, IOException {
     testMainPark();
-    String input = "admin\nadmin\n2\nAP01Z1234\n4";
+    String input = "2\nAP01Z1234\n4";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "0"});
   }
 
   /**
@@ -101,11 +101,12 @@ public class AppTest {
    */
   @Test
   public void testMainLoadTransaction() throws FileReadFailedException, IOException {
-    String input = "admin\nadmin\n20\n1\nAP01W1234\n4";
+    String input = "1\nAP01W1234\n4";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "1", "20"});
+
   }
 
   /**
@@ -113,29 +114,29 @@ public class AppTest {
    */
   @Test
   public void testMainCheckStatus() throws FileReadFailedException, IOException {
-    String input = "admin\nadmin\n20\n1\nAP01W1234\n3\nAP01W1234\n4";
+    String input = "1\nAP01W1234\n3\nAP01W1234\n4";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "1", "20"});
   }
 
   @Test
   public void testMainCheckStatusNotPresent() throws FileReadFailedException, IOException {
-    String input = "admin\nadmin\n20\n1\nAP01W1234\n3\nAP01W0234\n4";
+    String input = "1\nAP01W1234\n3\nAP01W0234\n4";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "1", "20"});
   }
 
   @Test
   public void testMainInvalidOption() throws FileReadFailedException, IOException {
-    String input = "admin\nadmin\n20\n5\n4\n";
+    String input = "20\n5\n4\n";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "1", "20"});
   }
 
   /**
@@ -143,20 +144,16 @@ public class AppTest {
    */
   @Test
   public void testMainInvalidLogin() throws FileReadFailedException, IOException {
-    String input = "admin\nadmi\n";
-    ByteArrayInputStream byteArrayInputStream =
-        new ByteArrayInputStream(input.getBytes());
-    System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admi","0"});
   }
 
   @Test
   public void testMainInvalidVehicleId() throws FileReadFailedException, IOException {
-    String input = "admin\nadmin\n20\n1\nAP01WWW1234\n4\n";
+    String input = "1\nAP01WWW1234\n4\n";
     ByteArrayInputStream byteArrayInputStream =
         new ByteArrayInputStream(input.getBytes());
     System.setIn(byteArrayInputStream);
-    App.main(null);
+    App.main(new String[]{"admin", "admin", "1", "20"});
   }
 
 }
