@@ -1,0 +1,7 @@
+/target/
+.project
+.idea/*
+.settings/*
+.vs
+.classpath
+Autoparking.iml
