@@ -7,7 +7,6 @@ import com.epam.autoparking.parkingservice.PresentInLotException;
 import com.epam.autoparking.persistance.DataFormat;
 import com.epam.autoparking.persistance.FileReadFailedException;
 import com.epam.autoparking.persistance.TransactionHandler;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -51,16 +50,24 @@ final class App {
    */
   private static Scanner scanner;
 
-  private static boolean validArgs(String[] args) {
+  /**
+   * method checks whether arguments passed are valid.
+   * @param args array of strings to validate
+   * @return true if valid, false otherwise
+   */
+  private static boolean validArgs(final String[] args) {
     boolean status = true;
 
-    if (args.length < 3)
+    if (args.length < 3) {
       status = false;
-    else if (args.length > 4)
+    } else if (args.length > 4) {
+
       status = false;
-    else if (args.length == 3 && !args[2].equals("0")) {
+    } else if (args.length == 3 && !args[2].equals("0")) {
       status = false;
-    } else if (args.length == 4 && !(args[2].equals("1") && Pattern.compile("\\d+").matcher(args[3]).matches())) {
+    } else if (args.length == 4
+        && !(args[2].equals("1")
+        && Pattern.compile("\\d+").matcher(args[3]).matches())) {
       status = false;
     }
 
@@ -70,8 +77,11 @@ final class App {
   /**
    * Main method Starting point of execution.
    * @param args command line parameters
+   * @throws FileReadFailedException when the transaction file reading fails
+   * @throws IOException when error in writing to file
    */
-  public static void main(final String[] args) throws FileReadFailedException, IOException {
+  public static void main(final String[] args)
+      throws FileReadFailedException, IOException {
 
     scanner = new Scanner(System.in);
 
@@ -121,7 +131,7 @@ final class App {
       int choice = getUserChoice();
 
       String vehicleNumber = null;
-      if (choice >=1 && choice <= 3) {
+      if (choice >= 1 && choice <= 3) {
         vehicleNumber = getValidVehicleID();
         if (vehicleNumber == null) {
           System.out.println("Please enter valid vehicle number");
@@ -154,7 +164,13 @@ final class App {
     } while (status);
   }
 
-  private static void checkStatus(ParkingLot parkingLot, String vehicleID) {
+  /**
+   * checks the status of vechicle in the parking lot.
+   * @param parkingLot object for parkinglot
+   * @param vehicleID vehicle registration number
+   */
+  private static void checkStatus(final ParkingLot parkingLot,
+                                  final String vehicleID) {
     try {
       parkingLot.checkStatus(vehicleID);
     } catch (NotPresentInLotException e) {
@@ -162,7 +178,17 @@ final class App {
     }
   }
 
-  private static void unpark(ParkingLot parkingLot, String vehiclenumber) throws FileReadFailedException, IOException {
+  /**
+   * unparks the vehicle from the parking lot.
+   *
+   * @param parkingLot    parking lot object
+   * @param vehiclenumber vehicle registration number
+   * @throws FileReadFailedException throws when reading from the file fails
+   * @throws IOException             throws when handling file fails
+   */
+  private static void unpark(final ParkingLot parkingLot,
+                             final String vehiclenumber)
+      throws FileReadFailedException, IOException {
     try {
       parkingLot.unparkVehicle(vehiclenumber);
     } catch (NotPresentInLotException e) {
@@ -170,7 +196,14 @@ final class App {
     }
   }
 
-  private static void park(ParkingLot parkingLot, String vehicleNumber) throws IOException {
+  /**
+   * parks the vehicle in the parking lot.
+   * @param parkingLot parking lot object to park
+   * @param vehicleNumber vehicle registration number
+   * @throws IOException throws when file handling fails
+   */
+  private static void park(final ParkingLot parkingLot,
+                           final String vehicleNumber) throws IOException {
     try {
       System.out.println("Your slot is '"
           + parkingLot.parkVehicle(vehicleNumber) + "'");
