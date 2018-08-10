@@ -1,6 +1,7 @@
 package com.epam.autoparking.parkingservice;
 
 import com.epam.autoparking.Vehicle;
+import com.epam.autoparking.persistance.DataFormat;
 import com.epam.autoparking.persistance.FileReadFailedException;
 import com.epam.autoparking.persistance.Log;
 import com.epam.autoparking.persistance.TransactionHandler;
@@ -108,7 +109,7 @@ public class ParkingLot {
    * @param id Vehicle Registration number
    * @return returns the status. -1 if fails. 0 if success
    */
-  public int unparkVehicle(final String id) throws NotPresentInLotException, FileReadFailedException, IOException {
+  public String unparkVehicle(final String id) throws NotPresentInLotException, FileReadFailedException, IOException {
     // if the vehicle is not present
     if (!isPresent(id)) {
       throw new NotPresentInLotException("Vehicle not present in parking lot");
@@ -116,7 +117,7 @@ public class ParkingLot {
 
     // get the slot of the vehicle in the parking lot
     int vehicleSlot = indexOfVehicle(id);
-    slots[vehicleSlot].printDetails();
+    String message = slots[vehicleSlot].getDetailsAsString();
     System.out.println("Removed Vehicle");
 
     // transaction file removal of entry
@@ -140,20 +141,20 @@ public class ParkingLot {
     log.close();
 
     slots[vehicleSlot] = null;
-    return 0;
+    return message;
   }
 
   /**
    * gives details of the vehicle in the parking.
    * @param id Vehicle Registration number
    */
-  public void checkStatus(final String id) throws NotPresentInLotException {
+  public String checkStatus(final String id) throws NotPresentInLotException {
     // if vehicle is not present
     if (!isPresent(id)) {
       throw new NotPresentInLotException("Vehicle Not present in Lot.");
     }
     int slotNumber = indexOfVehicle(id);
-    slots[slotNumber].printDetails();
+    return slots[slotNumber].getDetailsAsString();
   }
 
   /**
@@ -167,6 +168,23 @@ public class ParkingLot {
     slots[slotNo] = new Slot();
     slots[slotNo].assignVehicle(new Vehicle(id), inTime);
     noOfVehiclesInLot++;
+  }
+
+  public static ParkingLot loadFromTransactionFile() throws FileReadFailedException {
+    TransactionHandler transactionHandler = TransactionHandler.getInstance();
+    int parkingLotSize;
+    ParkingLot parkingLot;
+    System.out.println("[INFO]Reading from transaction File");
+    DataFormat dataFormat = transactionHandler.readRows();
+    parkingLotSize = Integer.parseInt(dataFormat.getRow(0).get(0));
+    parkingLot = new ParkingLot(parkingLotSize);
+    for (int i = 1; i < dataFormat.noOfRows(); i++) {
+      String id = dataFormat.getRow(i).get(0);
+      int slotNumber = Integer.parseInt(dataFormat.getRow(i).get(1));
+      LocalDateTime inTime = LocalDateTime.parse(dataFormat.getRow(i).get(2));
+      parkingLot.assignSlot(id, slotNumber, inTime);
+    }
+    return parkingLot;
   }
 
 }

@@ -108,16 +108,7 @@ final class App {
     TransactionHandler transactionHandler = TransactionHandler.getInstance();
 
     if (args[2].equals("0")) {
-      System.out.println("[INFO]Reading from transaction File");
-      DataFormat dataFormat = transactionHandler.readRows();
-      parkingLotSize = Integer.parseInt(dataFormat.getRow(0).get(0));
-      parkingLot = new ParkingLot(parkingLotSize);
-      for (int i = 1; i < dataFormat.noOfRows(); i++) {
-        String id = dataFormat.getRow(i).get(0);
-        int slotNumber = Integer.parseInt(dataFormat.getRow(i).get(1));
-        LocalDateTime inTime = LocalDateTime.parse(dataFormat.getRow(i).get(2));
-        parkingLot.assignSlot(id, slotNumber, inTime);
-      }
+      parkingLot = ParkingLot.loadFromTransactionFile();
     } else {
       transactionHandler.clear();
       parkingLotSize = Integer.parseInt(args[3]);
@@ -172,7 +163,8 @@ final class App {
   private static void checkStatus(final ParkingLot parkingLot,
                                   final String vehicleID) {
     try {
-      parkingLot.checkStatus(vehicleID);
+      String message = parkingLot.checkStatus(vehicleID);
+      System.out.println(message);
     } catch (NotPresentInLotException e) {
       System.out.println("Not present in the parking lot");
     }
@@ -190,7 +182,8 @@ final class App {
                              final String vehiclenumber)
       throws FileReadFailedException, IOException {
     try {
-      parkingLot.unparkVehicle(vehiclenumber);
+      String message = parkingLot.unparkVehicle(vehiclenumber);
+      System.out.println(message);
     } catch (NotPresentInLotException e) {
       System.out.println("Not present in the parking lot");
     }

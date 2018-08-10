@@ -50,10 +50,9 @@ class Slot {
   /**
    * prints the vehicle details like number of minutes.
    */
-  void printDetails() {
-    System.out.println("Vehicle with ID " + vehicle.getId() + " for "
-        + (inTime.until(LocalDateTime.now(), ChronoUnit.MINUTES)) + " minutes");
-
+  String getDetailsAsString() {
+    return "Vehicle with ID " + vehicle.getId() + " for "
+        + (inTime.until(LocalDateTime.now(), ChronoUnit.MINUTES)) + " minutes";
   }
 
 }

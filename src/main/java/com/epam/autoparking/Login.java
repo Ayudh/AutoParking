@@ -3,7 +3,7 @@ package com.epam.autoparking;
 /**
  * Login class to validate the admin.
  */
-final class Login {
+public final class Login {
 
   /**
    * private constructor.
@@ -27,7 +27,7 @@ final class Login {
    * @param password Admin password to be validated
    * @return true if both username and password is matched and false otherwise
    */
-  static boolean validateUser(final String userName, final String password) {
+  public static boolean validateUser(final String userName, final String password) {
     for (int i = 0; i < users.length; i++) {
       if (users[i].equalsIgnoreCase(userName)) {
         return passwords[i].equals(password);
