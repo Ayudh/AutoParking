@@ -1,17 +1,99 @@
 <html>
+
 <head>
-<title>Auto Parking - Login</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+  <style>
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1 0 auto;
+    }
+
+    body {
+      background-image: url("images/background.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .input-field input[type=date]:focus + label,
+    .input-field input[type=text]:focus + label,
+    .input-field input[type=email]:focus + label,
+    .input-field input[type=password]:focus + label {
+      color: #e91e63;
+    }
+
+    .input-field input[type=date]:focus,
+    .input-field input[type=text]:focus,
+    .input-field input[type=email]:focus,
+    .input-field input[type=password]:focus {
+      border-bottom: 2px solid #e91e63;
+      box-shadow: none;
+    }
+  </style>
 </head>
+
 <body>
-<form action="login" method="post">
-    User Name:    <input type="text" name="username">
-    Password:    <input type="password" name="password">
-    <input type="submit" value="submit">
-</form>
-<div style="color:red">
-<% if(request.getAttribute("message") != null)
-    out.print(request.getAttribute("message"));
-%>
-</div>
+  <div class="section"></div>
+  <main>
+    <center>
+
+      <div class="section teal-text">
+          <h1>Auto Parking</h1>
+      </div>
+
+      <h5 class="white-text">
+          <% if(request.getAttribute("message") != null)
+          out.print(request.getAttribute("message"));
+          else out.print("Please, login into your account");
+          %>
+      </h5>
+      <div class="section"></div>
+
+      <div class="container">
+        <div class="z-depth-2 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE; width: 30%;">
+
+          <form class="col s12" method="post">
+            <div class='row'>
+              <div class='col s12'>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='input-field col s12'>
+                <input type='text' name='username' id='username' autofocus required/>
+                <label for='username'>Enter your username</label>
+              </div>
+            </div>
+
+            <div class='row'>
+              <div class='input-field col s12'>
+                <input class='validate' type='password' name='password' id='password' required/>
+                <label for='password'>Enter your password</label>
+              </div>
+            </div>
+
+            <br />
+            <center>
+              <div class='row'>
+                <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+              </div>
+            </center>
+          </form>
+        </div>
+      </div>
+    </center>
+
+    <div class="section"></div>
+    <div class="section"></div>
+  </main>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
 </body>
+
 </html>

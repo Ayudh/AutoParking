@@ -14,7 +14,12 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    resp.sendRedirect("login.jsp");
+    if (req.getSession().getAttribute("username") != null) {
+      System.out.println("[DEBUG]redirecting already login");
+      resp.sendRedirect("home");
+      return;
+    }
+    req.getRequestDispatcher("login.jsp").forward(req, resp);
   }
 
   @Override
