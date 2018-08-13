@@ -1,5 +1,6 @@
 package com.epam.autoparking.servlets;
 
+import com.epam.autoparking.Vehicle;
 import com.epam.autoparking.parkingservice.NotPresentInLotException;
 import com.epam.autoparking.parkingservice.ParkingLot;
 import com.epam.autoparking.parkingservice.ParkingLotFullException;
@@ -26,41 +27,45 @@ public class HomeServlet extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String option = req.getParameter("option");
     String vehicleid = req.getParameter("vehicleid");
-    ParkingLot parkingLot;
-    try {
-      parkingLot = ParkingLot.loadFromTransactionFile();
-    } catch (FileReadFailedException e) {
-      parkingLot = new ParkingLot(20);
-      TransactionHandler.getInstance().writeSize(20);
-    }
-    String message = "";
-    switch (option) {
-      case "park":
-        try {
-          int slotNumber = parkingLot.parkVehicle(vehicleid);
-          message = "Your slot Number is " + slotNumber;
-        } catch (PresentInLotException e) {
-          message = "Already present in parkinglot";
-        } catch (ParkingLotFullException e) {
-          message = "Parking Lot Full";
-        }
-        break;
-      case "unpark":
-        try {
-          message = parkingLot.unparkVehicle(vehicleid)+"\nUnparked Successfully.";
-        } catch (NotPresentInLotException e) {
-          message = "Vehicle Not Present in Lot";
-        } catch (FileReadFailedException e) {
-          message = "Failed";
-        }
-        break;
-      case "status":
-        try {
-          message = parkingLot.checkStatus(vehicleid);
-        } catch (NotPresentInLotException e) {
-          message = "Not present in parking lot";
-        }
-        break;
+      String message = "";
+    if (Vehicle.validateVehicleNumber(vehicleid)) {
+      ParkingLot parkingLot;
+      try {
+        parkingLot = ParkingLot.loadFromTransactionFile();
+      } catch (Exception e) {
+        parkingLot = new ParkingLot(20);
+        TransactionHandler.getInstance().writeSize(20);
+      }
+      switch (option) {
+        case "park":
+          try {
+            int slotNumber = parkingLot.parkVehicle(vehicleid);
+            message = "Your slot Number is " + slotNumber;
+          } catch (PresentInLotException e) {
+            message = "Already present in parkinglot";
+          } catch (ParkingLotFullException e) {
+            message = "Parking Lot Full";
+          }
+          break;
+        case "unpark":
+          try {
+            message = parkingLot.unparkVehicle(vehicleid)+"\nUnparked Successfully.";
+          } catch (NotPresentInLotException e) {
+            message = "Vehicle Not Present in Lot";
+          } catch (FileReadFailedException e) {
+            message = "Failed";
+          }
+          break;
+        case "status":
+          try {
+            message = parkingLot.checkStatus(vehicleid);
+          } catch (NotPresentInLotException e) {
+            message = "Not present in parking lot";
+          }
+          break;
+      }
+    } else {
+      message = "Not a valid vehicle Number";
     }
     req.setAttribute("message", message);
     req.getRequestDispatcher("home.jsp").forward(req, resp);

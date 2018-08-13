@@ -13,7 +13,6 @@
       <input type="radio" name="option" value="park" checked>Park<br>
       <input type="radio" name="option" value="unpark">Unpark<br>
       <input type="radio" name="option" value="status">Status of vehicle<br>
-      <input type="radio" id="radio_erase" name="option" value="erase">Clear<br>
       Vehicle Number:<input type="text" name="vehicleid"><br>
       <input type="submit" value="Submit">
     </form>
@@ -21,14 +20,9 @@
     <% if(request.getAttribute("message") != null)
         out.print(request.getAttribute("message"));
     %>
+    <br><a href="logout">Logout :(</a>
     </div>
     <script>
-      $(document).ready(() => {
-        console.log("ready function");
-        $('#radio_erase').click(() => {
-          console.log("clicked");
-        })
-      });
     </script>
   </body>
 </html>

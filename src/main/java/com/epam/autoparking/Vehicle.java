@@ -39,7 +39,7 @@ public class Vehicle {
    * @param id Vehicle Registration number
    * @return true if matches specified pattern. false, otherwise
    */
-  static boolean validateVehicleNumber(final String id) {
+  public static boolean validateVehicleNumber(final String id) {
     Pattern p = Pattern.compile("(AP|TS)\\d\\d\\w{1,2}\\d\\d\\d\\d");
     return p.matcher(id).matches();
   }
