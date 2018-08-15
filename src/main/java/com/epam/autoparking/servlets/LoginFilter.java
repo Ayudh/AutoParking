@@ -16,11 +16,12 @@ public class LoginFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
     HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-    if (httpServletRequest.getSession().getAttribute("username") != null) {
+//    if (httpServletRequest.getSession().getAttribute("username") != null) {
+//      chain.doFilter(request, response);
+//    } else {
+//      httpServletRequest.getRequestDispatcher("/login").forward(request, response);
+//    }
       chain.doFilter(request, response);
-    } else {
-      httpServletRequest.getRequestDispatcher("/login").forward(request, response);
-    }
   }
 
   @Override

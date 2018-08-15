@@ -27,7 +27,7 @@ public class HomeServlet extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String option = req.getParameter("option");
     String vehicleid = req.getParameter("vehicleid");
-      String message = "";
+    String message = "";
     if (Vehicle.validateVehicleNumber(vehicleid)) {
       ParkingLot parkingLot;
       try {
@@ -67,7 +67,10 @@ public class HomeServlet extends HttpServlet {
     } else {
       message = "Not a valid vehicle Number";
     }
-    req.setAttribute("message", message);
-    req.getRequestDispatcher("home.jsp").forward(req, resp);
+//    req.setAttribute("message", message);
+//    req.getRequestDispatcher("home.jsp").forward(req, resp);
+    PrintWriter printWriter = resp.getWriter();
+    printWriter.write(message);
+    printWriter.flush();
   }
 }
