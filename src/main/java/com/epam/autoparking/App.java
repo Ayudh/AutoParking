@@ -6,9 +6,10 @@ import com.epam.autoparking.parkingservice.ParkingLotFullException;
 import com.epam.autoparking.parkingservice.PresentInLotException;
 import com.epam.autoparking.persistance.DataFormat;
 import com.epam.autoparking.persistance.FileReadFailedException;
-import com.epam.autoparking.persistance.TransactionHandler;
+import com.epam.autoparking.persistance.database.TransactionHandlerDatabase;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -81,7 +82,7 @@ final class App {
    * @throws IOException when error in writing to file
    */
   public static void main(final String[] args)
-      throws FileReadFailedException, IOException {
+      throws FileReadFailedException, IOException, SQLException, ClassNotFoundException {
 
     scanner = new Scanner(System.in);
 
@@ -105,7 +106,7 @@ final class App {
     int parkingLotSize;
     ParkingLot parkingLot;
 
-    TransactionHandler transactionHandler = TransactionHandler.getInstance();
+    TransactionHandlerDatabase transactionHandler = TransactionHandlerDatabase.getInstance();
 
     if (args[2].equals("0")) {
       parkingLot = ParkingLot.loadFromTransactionFile();
@@ -180,7 +181,7 @@ final class App {
    */
   private static void unpark(final ParkingLot parkingLot,
                              final String vehiclenumber)
-      throws FileReadFailedException, IOException {
+      throws FileReadFailedException, IOException, SQLException, ClassNotFoundException {
     try {
       String message = parkingLot.unparkVehicle(vehiclenumber);
       System.out.println(message);
@@ -196,7 +197,7 @@ final class App {
    * @throws IOException throws when file handling fails
    */
   private static void park(final ParkingLot parkingLot,
-                           final String vehicleNumber) throws IOException {
+                           final String vehicleNumber) throws IOException, SQLException, ClassNotFoundException {
     try {
       System.out.println("Your slot is '"
           + parkingLot.parkVehicle(vehicleNumber) + "'");

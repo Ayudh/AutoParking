@@ -3,11 +3,13 @@ package com.epam.autoparking.parkingservice;
 import com.epam.autoparking.Vehicle;
 import com.epam.autoparking.persistance.DataFormat;
 import com.epam.autoparking.persistance.FileReadFailedException;
-import com.epam.autoparking.persistance.Log;
-import com.epam.autoparking.persistance.TransactionHandler;
+import com.epam.autoparking.persistance.database.LogDatabase;
+import com.epam.autoparking.persistance.database.TransactionHandlerDatabase;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -75,7 +77,7 @@ public class ParkingLot {
    * @param id Vehicle Registration number
    * @return Parking slot number
    */
-  public int parkVehicle(final String id) throws PresentInLotException, ParkingLotFullException, IOException {
+  public int parkVehicle(final String id) throws PresentInLotException, ParkingLotFullException, IOException, SQLException, ClassNotFoundException {
     // if the vehicle is already present no need to park
     if (isPresent(id)) {
       throw new PresentInLotException("Vehicle already present in parking lot");
@@ -98,7 +100,7 @@ public class ParkingLot {
     noOfVehiclesInLot++;
 
     // Transaction file handling entry
-    TransactionHandler transactionHandler = TransactionHandler.getInstance();
+    TransactionHandlerDatabase transactionHandler = TransactionHandlerDatabase.getInstance();
     transactionHandler.writeEntry(id, indx, vehicleInTime);
 
     return indx;
@@ -109,7 +111,7 @@ public class ParkingLot {
    * @param id Vehicle Registration number
    * @return returns the status. -1 if fails. 0 if success
    */
-  public String unparkVehicle(final String id) throws NotPresentInLotException, FileReadFailedException, IOException {
+  public String unparkVehicle(final String id) throws NotPresentInLotException, FileReadFailedException, IOException, SQLException, ClassNotFoundException {
     // if the vehicle is not present
     if (!isPresent(id)) {
       throw new NotPresentInLotException("Vehicle not present in parking lot");
@@ -121,22 +123,20 @@ public class ParkingLot {
     System.out.println("Removed Vehicle");
 
     // transaction file removal of entry
-    TransactionHandler transactionHandler = TransactionHandler.getInstance();
+    TransactionHandlerDatabase transactionHandler = TransactionHandlerDatabase.getInstance();
     transactionHandler.deleteEntryById(id);
 
     // logging the entry
     Vehicle v = slots[vehicleSlot].getVehicle();
-    Log log = Log.getInstance();
+    LogDatabase log = LogDatabase.getInstance();
     log.write(
         v.getId(),
         Integer.toString(vehicleSlot),
         slots[vehicleSlot].getInTime().toString(),
         LocalDateTime.now().toString(),
-        Long.toString(
-            slots[vehicleSlot].getInTime().until(
+        (int)slots[vehicleSlot].getInTime().until(
                 LocalDateTime.now(),
                 ChronoUnit.MINUTES)
-        )
     );
     log.close();
 
@@ -170,18 +170,21 @@ public class ParkingLot {
     noOfVehiclesInLot++;
   }
 
-  public static ParkingLot loadFromTransactionFile() throws FileReadFailedException {
-    TransactionHandler transactionHandler = TransactionHandler.getInstance();
+  public static ParkingLot loadFromTransactionFile() throws FileReadFailedException, SQLException, ClassNotFoundException {
+    TransactionHandlerDatabase transactionHandler = TransactionHandlerDatabase.getInstance();
     int parkingLotSize;
     ParkingLot parkingLot;
     System.out.println("[INFO]Reading from transaction File");
     DataFormat dataFormat = transactionHandler.readRows();
-    parkingLotSize = Integer.parseInt(dataFormat.getRow(0).get(0));
+
+    parkingLotSize = transactionHandler.getParkingLotSize();
+
     parkingLot = new ParkingLot(parkingLotSize);
-    for (int i = 1; i < dataFormat.noOfRows(); i++) {
+    for (int i = 0; i < dataFormat.noOfRows(); i++) {
       String id = dataFormat.getRow(i).get(0);
       int slotNumber = Integer.parseInt(dataFormat.getRow(i).get(1));
-      LocalDateTime inTime = LocalDateTime.parse(dataFormat.getRow(i).get(2));
+      DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+      LocalDateTime inTime = LocalDateTime.parse(dataFormat.getRow(i).get(2), format);
       parkingLot.assignSlot(id, slotNumber, inTime);
     }
     return parkingLot;

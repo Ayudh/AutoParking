@@ -2,7 +2,7 @@ package com.epam.autoparking.servlets;
 
 import com.epam.autoparking.persistance.DataFormat;
 import com.epam.autoparking.persistance.FileReadFailedException;
-import com.epam.autoparking.persistance.TransactionHandler;
+import com.epam.autoparking.persistance.database.TransactionHandlerDatabase;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 @WebServlet("/getDetails")
 public class GetDetailsServlet extends HttpServlet {
@@ -20,15 +21,17 @@ public class GetDetailsServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     JsonArray jsonArray = new JsonArray();
     try {
-      DataFormat data = TransactionHandler.getInstance().readRows();
-      for (int i = 1; i < data.noOfRows(); i++) {
+      DataFormat data = TransactionHandlerDatabase.getInstance().readRows();
+      for (int i = 0; i < data.noOfRows(); i++) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("vehicleid", data.getRow(i).get(0));
         jsonObject.addProperty("slotnumber", data.getRow(i).get(1));
         jsonObject.addProperty("intime", data.getRow(i).get(2));
         jsonArray.add(jsonObject);
       }
-    } catch (FileReadFailedException e) {
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
       e.printStackTrace();
     }
     resp.setContentType("application/json");

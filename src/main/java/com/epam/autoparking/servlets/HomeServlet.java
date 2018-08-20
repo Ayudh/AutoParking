@@ -6,7 +6,7 @@ import com.epam.autoparking.parkingservice.ParkingLot;
 import com.epam.autoparking.parkingservice.ParkingLotFullException;
 import com.epam.autoparking.parkingservice.PresentInLotException;
 import com.epam.autoparking.persistance.FileReadFailedException;
-import com.epam.autoparking.persistance.TransactionHandler;
+import com.epam.autoparking.persistance.database.TransactionHandlerDatabase;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 @WebServlet(urlPatterns = "/home")
 public class HomeServlet extends HttpServlet {
@@ -33,8 +34,16 @@ public class HomeServlet extends HttpServlet {
       try {
         parkingLot = ParkingLot.loadFromTransactionFile();
       } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("error in fetching parking size");
         parkingLot = new ParkingLot(20);
-        TransactionHandler.getInstance().writeSize(20);
+        try {
+          TransactionHandlerDatabase.getInstance().writeSize(20);
+        } catch (SQLException e1) {
+          e1.printStackTrace();
+        } catch (ClassNotFoundException e1) {
+          e1.printStackTrace();
+        }
       }
       switch (option) {
         case "park":
@@ -45,6 +54,10 @@ public class HomeServlet extends HttpServlet {
             message = "Already present in parkinglot";
           } catch (ParkingLotFullException e) {
             message = "Parking Lot Full";
+          } catch (SQLException e) {
+            e.printStackTrace();
+          } catch (ClassNotFoundException e) {
+            message = "Database Driver not loaded";
           }
           break;
         case "unpark":
@@ -54,6 +67,10 @@ public class HomeServlet extends HttpServlet {
             message = "Vehicle Not Present in Lot";
           } catch (FileReadFailedException e) {
             message = "Failed";
+          } catch (SQLException e) {
+            e.printStackTrace();
+          } catch (ClassNotFoundException e) {
+            message = "Error in loading driver";
           }
           break;
         case "status":
