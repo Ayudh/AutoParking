@@ -1,6 +1,5 @@
 package com.epam.autoparking.servlets;
 
-
 import com.epam.autoparking.Login;
 
 import javax.servlet.ServletException;
@@ -26,8 +25,10 @@ public class LoginServlet extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String username = req.getParameter("username");
     String password = req.getParameter("password");
-    if (Login.validateUser(username, password)) {
+    int role = Login.validateUser(username, password);
+    if (role != -1) {
       req.getSession().setAttribute("username", username);
+      req.getSession().setAttribute("userrole", role);
       resp.sendRedirect("home");
     } else {
       req.setAttribute("message", "Invalid Username or password");

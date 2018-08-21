@@ -3,8 +3,8 @@ package com.epam.autoparking.parkingservice;
 import com.epam.autoparking.Vehicle;
 import com.epam.autoparking.persistance.DataFormat;
 import com.epam.autoparking.persistance.FileReadFailedException;
-import com.epam.autoparking.persistance.database.LogDatabase;
-import com.epam.autoparking.persistance.database.TransactionHandlerDatabase;
+import com.epam.autoparking.persistance.LogHandler;
+import com.epam.autoparking.persistance.TransactionHandler;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -100,7 +100,7 @@ public class ParkingLot {
     noOfVehiclesInLot++;
 
     // Transaction file handling entry
-    TransactionHandlerDatabase transactionHandler = TransactionHandlerDatabase.getInstance();
+    TransactionHandler transactionHandler = TransactionHandler.getInstance();
     transactionHandler.writeEntry(id, indx, vehicleInTime);
 
     return indx;
@@ -123,12 +123,12 @@ public class ParkingLot {
     System.out.println("Removed Vehicle");
 
     // transaction file removal of entry
-    TransactionHandlerDatabase transactionHandler = TransactionHandlerDatabase.getInstance();
+    TransactionHandler transactionHandler = TransactionHandler.getInstance();
     transactionHandler.deleteEntryById(id);
 
     // logging the entry
     Vehicle v = slots[vehicleSlot].getVehicle();
-    LogDatabase log = LogDatabase.getInstance();
+    LogHandler log = LogHandler.getInstance();
     log.write(
         v.getId(),
         Integer.toString(vehicleSlot),
@@ -171,7 +171,7 @@ public class ParkingLot {
   }
 
   public static ParkingLot loadFromTransactionFile() throws FileReadFailedException, SQLException, ClassNotFoundException {
-    TransactionHandlerDatabase transactionHandler = TransactionHandlerDatabase.getInstance();
+    TransactionHandler transactionHandler = TransactionHandler.getInstance();
     int parkingLotSize;
     ParkingLot parkingLot;
     System.out.println("[INFO]Reading from transaction File");

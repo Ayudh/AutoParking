@@ -29,8 +29,4 @@ public class LogDatabase {
     statement.executeUpdate();
   }
 
-  public void close() throws SQLException {
-    logDatabase = null;
-  }
-
 }

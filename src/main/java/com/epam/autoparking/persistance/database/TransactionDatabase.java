@@ -1,6 +1,5 @@
 package com.epam.autoparking.persistance.database;
 
-
 import com.epam.autoparking.persistance.DataFormat;
 
 import java.sql.Connection;
@@ -11,18 +10,18 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TransactionHandlerDatabase {
-  private static TransactionHandlerDatabase transactionHandlerDatabase;
+public class TransactionDatabase {
+  private static TransactionDatabase transactionDatabase;
   private Connection connection;
 
-  private TransactionHandlerDatabase() throws SQLException, ClassNotFoundException {
+  private TransactionDatabase() throws SQLException, ClassNotFoundException {
     connection = DatabaseConnection.getConnection();
   }
 
-  public static TransactionHandlerDatabase getInstance() throws SQLException, ClassNotFoundException {
-    if (transactionHandlerDatabase == null)
-      transactionHandlerDatabase = new TransactionHandlerDatabase();
-    return transactionHandlerDatabase;
+  public static TransactionDatabase getInstance() throws SQLException, ClassNotFoundException {
+    if (transactionDatabase == null)
+      transactionDatabase = new TransactionDatabase();
+    return transactionDatabase;
   }
 
   public void writeEntry(final String vehicleId, final int slotnumber,
@@ -31,12 +30,6 @@ public class TransactionHandlerDatabase {
     statement.setString(1, vehicleId);
     statement.setInt(2, slotnumber);
     statement.setString(3, intime.toString());
-    statement.executeUpdate();
-  }
-
-  public void writeSize(int parkingSize) throws SQLException {
-    PreparedStatement statement = connection.prepareStatement("UPDATE parkinglotsize SET parkingsize = ?");
-    statement.setInt(1, parkingSize);
     statement.executeUpdate();
   }
 
@@ -66,21 +59,6 @@ public class TransactionHandlerDatabase {
   public void clear() throws SQLException {
     PreparedStatement statement = connection.prepareStatement("TRUNCATE TABLE transaction");
     statement.executeUpdate();
-  }
-
-  public boolean isValid() {
-    return true;
-  }
-
-  public boolean exists() {
-    return true;
-  }
-
-  public int getParkingLotSize() throws SQLException {
-    PreparedStatement statement = connection.prepareStatement("SELECT parkingsize FROM parkinglotsize");
-    ResultSet resultSet = statement.executeQuery();
-    resultSet.next();
-    return resultSet.getInt(1);
   }
 
 }

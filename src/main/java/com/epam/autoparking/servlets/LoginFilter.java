@@ -5,7 +5,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/home", "/home.jsp"})
+@WebFilter(urlPatterns = {"/park.html", "/unpark.jsp"})
 public class LoginFilter implements Filter {
 
   @Override

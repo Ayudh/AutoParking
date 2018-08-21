@@ -4,13 +4,11 @@ import com.epam.autoparking.parkingservice.NotPresentInLotException;
 import com.epam.autoparking.parkingservice.ParkingLot;
 import com.epam.autoparking.parkingservice.ParkingLotFullException;
 import com.epam.autoparking.parkingservice.PresentInLotException;
-import com.epam.autoparking.persistance.DataFormat;
 import com.epam.autoparking.persistance.FileReadFailedException;
-import com.epam.autoparking.persistance.database.TransactionHandlerDatabase;
+import com.epam.autoparking.persistance.TransactionHandler;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -95,7 +93,7 @@ final class App {
     String userName = args[0];
     String password = args[1];
 
-    if (!Login.validateUser(userName, password)) {
+    if (Login.validateUser(userName, password) != -1) {
       System.out.println("Error: Authentication failed. "
           + "Username or Password is incorrect.");
       return;
@@ -106,7 +104,7 @@ final class App {
     int parkingLotSize;
     ParkingLot parkingLot;
 
-    TransactionHandlerDatabase transactionHandler = TransactionHandlerDatabase.getInstance();
+    TransactionHandler transactionHandler = TransactionHandler.getInstance();
 
     if (args[2].equals("0")) {
       parkingLot = ParkingLot.loadFromTransactionFile();

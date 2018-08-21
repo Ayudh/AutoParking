@@ -6,7 +6,7 @@ import com.epam.autoparking.parkingservice.ParkingLot;
 import com.epam.autoparking.parkingservice.ParkingLotFullException;
 import com.epam.autoparking.parkingservice.PresentInLotException;
 import com.epam.autoparking.persistance.FileReadFailedException;
-import com.epam.autoparking.persistance.database.TransactionHandlerDatabase;
+import com.epam.autoparking.persistance.TransactionHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,7 +38,7 @@ public class HomeServlet extends HttpServlet {
         System.out.println("error in fetching parking size");
         parkingLot = new ParkingLot(20);
         try {
-          TransactionHandlerDatabase.getInstance().writeSize(20);
+          TransactionHandler.getInstance().writeSize(20);
         } catch (SQLException e1) {
           e1.printStackTrace();
         } catch (ClassNotFoundException e1) {

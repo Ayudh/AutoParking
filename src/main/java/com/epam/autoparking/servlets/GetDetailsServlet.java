@@ -1,8 +1,7 @@
 package com.epam.autoparking.servlets;
 
 import com.epam.autoparking.persistance.DataFormat;
-import com.epam.autoparking.persistance.FileReadFailedException;
-import com.epam.autoparking.persistance.database.TransactionHandlerDatabase;
+import com.epam.autoparking.persistance.TransactionHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -21,7 +20,7 @@ public class GetDetailsServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     JsonArray jsonArray = new JsonArray();
     try {
-      DataFormat data = TransactionHandlerDatabase.getInstance().readRows();
+      DataFormat data = TransactionHandler.getInstance().readRows();
       for (int i = 0; i < data.noOfRows(); i++) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("vehicleid", data.getRow(i).get(0));
