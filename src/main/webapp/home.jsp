@@ -1,109 +1,118 @@
+<!-- 24240100006770 -->
+<!DOCTYPE html>
 <html>
-
 <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AJAX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <style>
-    body {
-      display: flex;
-      min-height: 100vh;
-      flex-direction: column;
-    }
-
-    main {
-      flex: 1 0 auto;
-    }
-
     body {
       background-image: url("images/background.jpg");
       background-repeat: no-repeat;
       background-size: cover;
+      color: white;
     }
-
-    .input-field input[type=date]:focus + label,
-    .input-field input[type=text]:focus + label,
-    .input-field input[type=email]:focus + label,
-    .input-field input[type=password]:focus + label {
-      color: #e91e63;
+    .left-div {
+      height: 100%;
+      width: 30%;
+      left: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      overflow-x: hidden;
+      padding-top: 20px;
     }
-
-    .input-field input[type=date]:focus,
-    .input-field input[type=text]:focus,
-    .input-field input[type=email]:focus,
-    .input-field input[type=password]:focus {
-      border-bottom: 2px solid #e91e63;
-      box-shadow: none;
+    .right-div {
+      height: 100%;
+      width: 70%;
+      right: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      overflow-x: hidden;
+      padding-top: 20px;
+    }
+    .glow {
+      border-style: solid;
+      border-color: rgb(81, 175, 81);
+      -webkit-transition: border 0.1s linear, box-shadow 0.1s linear;
+      -moz-transition: border 0.1s linear, box-shadow 0.1s linear;
+      transition: border 0.1s linear, box-shadow 0.1s linear;
     }
   </style>
 </head>
-
 <body>
-  <div class="section"></div>
-  <main>
-    <center>
-
-      <div class="section teal-text">
-          <h1>Auto Parking</h1>
-      </div>
-
-      <h5 class="white-text">
-          <% if(request.getAttribute("message") != null)
-          out.print(request.getAttribute("message"));
-          else
-          out.print("Welcome " + request.getSession().getAttribute("username").toString().toUpperCase());
-          %>
-      </h5>
-      <div class="section"></div>
-
-      <div class="container">
-        <div class="z-depth-2 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE; width: 30%;">
-
-          <form class="col s12" action="home" method="post">
+  <center>
+    <h4 class="teal-text">Autoparking</h4>
+  </center>
+  <div class="left left-div valign-wrapper">
+    <div class="z-depth-5 lighten-4 row" style="display: inline-block; width:60%;">
+        <form class="col s12" id="my-form">
+          <div class='row'>
+            <div class='col s12'>
+            </div>
+          </div>
+          <center>
+            <div>
+              <div class="row left-align">
+                <input id="choice_1" class="with-gap" name="option" type="radio" value="park"
+                <% if(request.getSession().getAttribute("userrole").toString().equals("1")) out.print("disabled"); %>/>   
+                <label for="choice_1">Park</label>
+              </div>
+              <div class="row left-align">
+                <input id="choice_2" class="with-gap" name="option" type="radio" value="unpark"
+                <% if(request.getSession().getAttribute("userrole").toString().equals("0")) out.print("disabled"); %>/>   
+                <label for="choice_2">Unpark</label>
+              </div>
+            </div>
+          </center>
+          <div class='row'>
+            <div class='input-field col s12'>
+              <input class='validate' type='text' name='vehicleid' id='vehicleid'/>
+              <label for='vehicleid'>Enter Vehicle ID</label>
+            </div>
+          </div>
+          <center>
             <div class='row'>
-              <div class='col s12'>
-              </div>
+              <button type="submit" class="col s12 btn btn-large waves-effect indigo">Submit</button><br/>
+              <button type="reset" onclick="location.href='logout'" class="col s12 btn btn-large waves-effect indigo" style="margin-top:20px;">Logout</button>
             </div>
-
-            <div class="row left-align">
-              <input id="choice_1" class="with-gap" name="option" type="radio" value="park" checked/>   
-              <label for="choice_1">Park</label>
-            </div>
-            <div class="row left-align">
-              <input id="choice_2" class="with-gap" name="option" type="radio" value="unpark"/>   
-              <label for="choice_2">Unpark</label>
-            </div>
-            <div class="row left-align">
-              <input id="choice_3" class="with-gap" name="option" type="radio" value="status"/>   
-              <label for="choice_3">Status</label>
-            </div>
-                
-            <div class='row'>
-              <div class='input-field col s12'>
-                <input class='validate' type='text' name='vehicleid' id='vehicleid' required/>
-                <label for='vehicleid'>Enter Vehicle ID</label>
-              </div>
-            </div>
-
-            <br />
-            <center>
-              <div class='row'>
-                <button type="submit" class="col s12 btn btn-large waves-effect indigo">Submit</button>
-              </div>
-            </center>
-          </form>
-          <div class="row">
-              <a href="logout"><button class="col s12 btn btn-large waves-effect indigo">Logout</button></a>
-            </div>
+          </center>
+        </form>
+        <div class="row">
         </div>
       </div>
-    </center>
+  </div>
 
-    <div class="section"></div>
-    <div class="section"></div>
-  </main>
+  <div class="right right-div valign-wrapper">
+    <div class="z-depth-5 lighten-4 row" style="display: inline-block; width:60%; padding-left: 10px;">
+        <table>
+            <thead>
+              <tr>
+                  <th>Vehicle ID</th>
+                  <th>Slot Number</th>
+                  <th>In-time</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              
+            </tbody>
+            <% if(request.getSession().getAttribute("userrole").toString().equals("1") || request.getSession().getAttribute("userrole").toString().equals("0")) {
+              out.print("No Permissions to view.");
+              out.print("<script>$('#table-body').hide()</script>");
+            }  %>
+          </table>
+      <div class="row">
+      </div>
+    </div>
+  </div>
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+  <script src="scripts/script.js"></script>
 </body>
-
 </html>
